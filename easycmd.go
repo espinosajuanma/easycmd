@@ -1,29 +1,42 @@
 package easycmd
 
 type App struct {
-	Commands    []Command
+	Commands    map[string]*Command
+	Aliases     map[string]*Command
 	Description string
 	Author      string
 }
 
-func (r *App) AddCommand(cmd Command) []Command {
-	r.Commands = append(r.Commands, cmd)
-	return r.Commands
-}
-
-func (r App) Run(command string, args []string) {
-	for _, cmd := range r.Commands {
-		if cmd.Name == command || cmd.IsAlias(command) {
-			cmd.Run(args)
-		}
+func (app *App) AddCommand(cmd Command) {
+	app.Commands[cmd.Name] = &cmd
+	for _, alias := range cmd.Aliases {
+		app.Aliases[alias] = &cmd
 	}
 }
 
-func NewApp(description string, author string) App {
-	app := App{
-		[]Command{},
-		description,
-		author,
+func (app App) Run(command string, args []string) {
+	if command == "" {
+		app.Commands["help"].Run(args)
+		return
 	}
-	return app
+
+	cmd, ok := app.Commands[command]
+	if ok {
+		cmd.Run(args)
+		return
+	}
+
+	alias, ok := app.Aliases[command]
+	if ok {
+		alias.Run(args)
+		return
+	}
+
+	app.Commands["help"].Run(args)
+}
+
+func NewApp() {
+	app := new(App)
+	app.Commands = make(map[string]*Command)
+	app.Aliases = make(map[string]*Command)
 }
