@@ -2,7 +2,7 @@
 
 This is my first go module intended to make a easy command handler for simple go cli applications
 
-There is a lot of nice commanders writing in go. But I wanted to make one with my own preferences
+There is a lot of nice commanders writing in go. But I wanted to make one with my own preferences and also like a learning process
 
 Simple enough just to make a quick cli app:
 - No flags

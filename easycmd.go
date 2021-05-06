@@ -5,6 +5,7 @@ type App struct {
 	Aliases     map[string]*Command
 	Description string
 	Author      string
+	Version     string
 }
 
 func (app *App) AddCommand(cmd Command) {
@@ -35,8 +36,10 @@ func (app App) Run(command string, args []string) {
 	app.Commands["help"].Run(args)
 }
 
-func NewApp() {
+func NewApp() *App {
 	app := new(App)
 	app.Commands = make(map[string]*Command)
 	app.Aliases = make(map[string]*Command)
+
+	return app
 }
